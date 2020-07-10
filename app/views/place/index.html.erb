@@ -1,2 +1,40 @@
-<h1>Place#index</h1>
-<p>Find me in app/views/place/index.html.erb</p>
+<h1>Pagina de Lugar</h1>
+<p>Tarea 5 Graphql con API de Rick and Morty</p>
+<h4> <%= link_to 'Volver inicio', root_path %></h4>
+
+<%
+require 'gqli'
+
+@CONTENTFUL_GQL = GQLi::Client.new(
+  "https://integracion-rick-morty-api.herokuapp.com/graphql"
+)
+
+motivox = params[:motivo]
+
+@CapsQuery2 =  GQLi::DSL.query {
+  location(id:motivox){
+		name
+    type
+    dimension
+    residents{
+      name
+      id
+    }
+  }
+}
+@capitulo = @CONTENTFUL_GQL.execute(@CapsQuery2)
+@cap = @capitulo.data.location
+%>
+
+<hr>
+<h1> Nombre: <%=@cap.name%></h1>
+<hr>
+<h2> Tipo: <%=@cap.type%></h2>
+<hr>
+<h2> Dimension: <%=@cap.dimension%></h2>
+<hr>
+<h2> Residentes: </h2>
+<hr>
+<% @cap.residents.each do |character| %>
+    <h3> - <%= link_to character.name, character_index_path(:motivo => character.id) %></h3>
+<% end %>

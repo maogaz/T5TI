@@ -1,11 +1,13 @@
-<h1>Episodios</h1>
-<% require 'json'%>
-<% require 'rest-client'%>
+<h1>Pagina de Inicio</h1>
+<p>Tarea 5 Graphql con API de Rick and Morty</p>
 
-<% @url1 = 'https://rickandmortyapi.com/api/episode'%>
-<% @response1 = RestClient.get @url1%>
-<% @result1 = JSON.parse @response1.to_str%>
-<% @response2 = @result1 %>
+<div class="topnav">
+  <a class="active" href="#home">Home</a>
+  <input type="text" placeholder="Search..">
+</div>
+
+<h1>Episodios</h1>
+
 <%
 require 'gqli'
 
@@ -49,7 +51,7 @@ require 'gqli'
 
 <% @caps2.each do |episode| %>
     <hr>
-    <h2> Nombre: <%=episode.name%></h2>
+    <h2> Nombre: <%= link_to episode.name, episode_index_path(motivo: episode.episode)%></h2>
     <h3> Fecha de transmicion: <%=episode.air_date%></h3>
     <h3> Codigo episodio: <%=episode.episode%></h3>
     </hr>

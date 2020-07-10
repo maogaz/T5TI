@@ -1,8 +1,7 @@
 require_relative 'boot'
 
 require 'rails/all'
-require "graphql/client"
-require "graphql/client/http"
+
 
 
 # Require the gems listed in Gemfile, including any gems

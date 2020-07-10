@@ -10,9 +10,9 @@
 require 'gqli'
 
 @CONTENTFUL_GQL = GQLi::Client.new(
-  "https://rickandmortyapi.com/graphql/"
+  "https://integracion-rick-morty-api.herokuapp.com/graphql"
 )
-@CatQuery =  GQLi::DSL.query {
+@CapsQuery1 =  GQLi::DSL.query {
   episodes{
     results{
       episode
@@ -21,19 +21,37 @@ require 'gqli'
     }
   }
 }
-@resultado = @CONTENTFUL_GQL.execute(@CatQuery)
-%>
-<% puts "###"%>
-<% @hola = @resultado.data.episodes.results %>
-<% puts "###"%>
 
-<% @hola.each do |episode| %>
+@CapsQuery2 =  GQLi::DSL.query {
+  episodes(page:2){
+    results{
+      episode
+      air_date
+      name
+      id
+    }
+  }
+}
+
+@capitulos1 = @CONTENTFUL_GQL.execute(@CapsQuery1)
+@capitulos2 = @CONTENTFUL_GQL.execute(@CapsQuery2)
+@caps1 = @capitulos1.data.episodes.results
+@caps2 = @capitulos2.data.episodes.results
+
+%>
+<% @caps1.each do |episode| %>
+    <hr>
+    <h2> Nombre: <%= link_to episode.name, episode_index_path(motivo: episode.episode)%></h2>
+    <h3> Fecha de transmicion: <%=episode.air_date%></h3>
+    <h3> Codigo episodio: <%=episode.episode%></h3>
+    </hr>
+<% end %>
+
+<% @caps2.each do |episode| %>
     <hr>
     <h2> Nombre: <%=episode.name%></h2>
     <h3> Fecha de transmicion: <%=episode.air_date%></h3>
     <h3> Codigo episodio: <%=episode.episode%></h3>
     </hr>
 <% end %>
-<% %>
-
 <% %>

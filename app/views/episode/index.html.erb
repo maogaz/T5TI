@@ -1,0 +1,44 @@
+<h1>Episode#index</h1>
+<p>Find me in app/views/episode/index.html.erb</p>
+
+<%
+require 'gqli'
+
+@CONTENTFUL_GQL = GQLi::Client.new(
+  "https://integracion-rick-morty-api.herokuapp.com/graphql"
+)
+
+motivox = params[:motivo]
+
+@CapsQuery2 =  GQLi::DSL.query {
+  episodes(filter:{episode: motivox}){
+    results{
+      name
+    	air_date
+    	episode
+      id
+      characters{
+        name
+        id
+      }
+    }
+  }
+}
+@capitulo = @CONTENTFUL_GQL.execute(@CapsQuery2)
+@cap = @capitulo.data.episodes.results
+%>
+<hr>
+<% @cap.each do |episode| %>
+
+    <hr>
+    <h2> Nombre: <%=episode.name%></h2>
+    <h3> Fecha de transmicion: <%=episode.air_date%></h3>
+    <h3> Codigo episodio: <%=episode.episode%></h3>
+    </hr>
+    <hr>
+    <h2> Personajes:</h2>
+    <hr>
+    <% episode.characters.each do |character| %>
+        <h3> - <%= link_to character.name, character_index_path(:motivo => character.id) %></h3>
+    <% end %>
+<% end %>

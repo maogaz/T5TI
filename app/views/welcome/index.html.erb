@@ -1,0 +1,39 @@
+<h1>Episodios</h1>
+<% require 'json'%>
+<% require 'rest-client'%>
+
+<% @url1 = 'https://rickandmortyapi.com/api/episode'%>
+<% @response1 = RestClient.get @url1%>
+<% @result1 = JSON.parse @response1.to_str%>
+<% @response2 = @result1 %>
+<%
+require 'gqli'
+
+@CONTENTFUL_GQL = GQLi::Client.new(
+  "https://rickandmortyapi.com/graphql/"
+)
+@CatQuery =  GQLi::DSL.query {
+  episodes{
+    results{
+      episode
+      air_date
+      name
+    }
+  }
+}
+@resultado = @CONTENTFUL_GQL.execute(@CatQuery)
+%>
+<% puts "###"%>
+<% @hola = @resultado.data.episodes.results %>
+<% puts "###"%>
+
+<% @hola.each do |episode| %>
+    <hr>
+    <h2> Nombre: <%=episode.name%></h2>
+    <h3> Fecha de transmicion: <%=episode.air_date%></h3>
+    <h3> Codigo episodio: <%=episode.episode%></h3>
+    </hr>
+<% end %>
+<% %>
+
+<% %>
